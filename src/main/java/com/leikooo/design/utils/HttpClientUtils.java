@@ -7,7 +7,6 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpRequestBase;
-import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 import org.springframework.http.HttpMethod;
@@ -31,6 +30,7 @@ public class HttpClientUtils {
                 http = new HttpPost(url);
             }
             HttpEntity entity = client.execute(http).getEntity();
+            // 转化成 JSON 对象
             return JSONObject.parseObject(EntityUtils.toString(entity));
         } catch (IOException e) {
             log.error(e.getMessage());

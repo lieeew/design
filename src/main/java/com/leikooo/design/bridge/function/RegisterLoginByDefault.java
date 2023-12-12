@@ -1,22 +1,26 @@
-package com.leikooo.design.service;
+package com.leikooo.design.bridge.function;
 
 import com.leikooo.design.pojo.UserInfo;
 import com.leikooo.design.repo.UserRepository;
 import jakarta.annotation.Resource;
+import jakarta.servlet.http.HttpServletRequest;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.stereotype.Service;
-import java.util.Date;
+import org.springframework.stereotype.Component;
 
+import java.net.http.HttpRequest;
+import java.util.Date;
 
 /**
  * @author <a href="https://github.com/lieeew">leikooo</a>
  * @Description
  */
-@Service
-public class UserService {
+@Component
+public class RegisterLoginByDefault implements RegisterLoginFuncInterface {
+
     @Resource
     private UserRepository userRepository;
 
+    @Override
     public String login(String account, String password) {
         assert StringUtils.isAnyEmpty(account, password) : "account or password do not follow our request";
         UserInfo userInfo = userRepository.findByUserNameAndUserPassword(account, password);
@@ -26,23 +30,31 @@ public class UserService {
         return "loginSuccess";
     }
 
+    @Override
     public String register(UserInfo userInfo) {
-        if (checkUserExists(userInfo.getUserName())) {
+        if (this.checkUserExist(userInfo.getUserName())) {
             throw new RuntimeException("user already exists");
         }
         userInfo.setCreatData(new Date());
         userRepository.save(userInfo);
         return "Register success";
+
+    }
+
+    @Override
+    public boolean checkUserExist(String account) {
+        UserInfo byUserName = userRepository.findByUserName(account);
+        return byUserName != null;
     }
 
     /**
+     * 这里是小瑕疵，不该需要在这里实现
      *
-     *
-     * @param userName
-     * @return true 存在 ; false 不存在
+     * @param request
+     * @return
      */
-    public boolean checkUserExists(String userName) {
-        UserInfo byUserName = userRepository.findByUserName(userName);
-        return byUserName != null;
+    @Override
+    public String login3rd(HttpServletRequest request) {
+        return null;
     }
 }

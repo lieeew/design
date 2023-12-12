@@ -2,7 +2,6 @@ package com.leikooo.design.pojo;
 
 import jakarta.persistence.*;
 import lombok.Data;
-
 import java.util.Date;
 
 /**
@@ -28,4 +27,13 @@ public class UserInfo {
 
     @Column
     private String userEmail;
+
+    public UserInfo(String userName, String userPassword) {
+        this.userName = userName;
+        this.userPassword = userPassword;
+    }
+
+    public UserInfo() {
+
+    }
 }

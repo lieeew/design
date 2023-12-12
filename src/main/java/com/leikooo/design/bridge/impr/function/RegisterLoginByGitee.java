@@ -1,20 +1,25 @@
-package com.leikooo.design.adapter;
+package com.leikooo.design.bridge.impr.function;
 
 import com.alibaba.fastjson2.JSONObject;
 import com.leikooo.design.pojo.UserInfo;
-import com.leikooo.design.service.UserService;
+import com.leikooo.design.repo.UserRepository;
 import com.leikooo.design.utils.HttpClientUtils;
+import jakarta.annotation.Resource;
+import jakarta.servlet.http.HttpServletRequest;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
+
 
 /**
  * @author <a href="https://github.com/lieeew">leikooo</a>
  * @Description
  */
 @Component
-public class Login3rdAdapter extends UserService implements Login3rdTarget {
+public class RegisterLoginByGitee extends AbstractRegisterLoginFunc implements RegisterLoginFuncInterface {
+    @Resource
+    private UserRepository userRepository;
 
     @Value("${gitee.state}")
     private String giteeState;
@@ -28,8 +33,11 @@ public class Login3rdAdapter extends UserService implements Login3rdTarget {
     @Value("${gitee.user.prefix}")
     private String giteePrefix;
 
+
     @Override
-    public String loginByGitee(String code, String state) {
+    public String login3rd(HttpServletRequest request) {
+        String state = request.getParameter("state");
+        String code = request.getParameter("code");
         if (!giteeState.equals(state)) {
             throw new UnsupportedOperationException("Invalid state !");
         }
@@ -51,19 +59,9 @@ public class Login3rdAdapter extends UserService implements Login3rdTarget {
             throw new UnsupportedOperationException("Invalid userName or password!");
         }
         UserInfo userInfo = new UserInfo(userName, password);
-        if (!checkUserExists(userName)) {
-            register(userInfo);
+        if (!super.commonCheckUserExist(userName, userRepository)) {
+            super.commonRegister(userInfo, userRepository);
         }
-        return login(userName, password);
-    }
-
-    @Override
-    public String loginByGithub(String... parameters) {
-        return null;
-    }
-
-    @Override
-    public String loginByWeChat(String... parameters) {
-        return null;
+        return super.commonLogin(userName, password, userRepository);
     }
 }
