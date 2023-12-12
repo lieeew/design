@@ -14,11 +14,5 @@ public interface RegisterLoginFuncInterface {
 
     boolean checkUserExist(String account);
 
-    /**
-     * 第三方登录接口
-     *
-     * @param request
-     * @return
-     */
     String login3rd(HttpServletRequest request);
 }

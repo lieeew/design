@@ -1,4 +1,4 @@
-package com.leikooo.design.bridge.impr.function;
+package com.leikooo.design.bridge.function;
 
 import com.leikooo.design.pojo.UserInfo;
 import com.leikooo.design.repo.UserRepository;

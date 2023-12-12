@@ -4,8 +4,6 @@ import com.leikooo.design.bridge.function.RegisterLoginFuncInterface;
 import com.leikooo.design.pojo.UserInfo;
 import jakarta.servlet.http.HttpServletRequest;
 
-import java.net.http.HttpRequest;
-
 /**
  * @author <a href="https://github.com/lieeew">leikooo</a>
  * @Description
@@ -18,13 +16,13 @@ public abstract class AbstractRegisterLoginComponent {
         this.funcInterface = funcInterface;
     }
 
-    protected abstract String login(String account, String password);
+    public abstract String login(String account, String password);
 
-    protected abstract String register(UserInfo userInfo);
+    public abstract String register(UserInfo userInfo);
 
-    protected abstract boolean checkUserExist(String account);
+    public abstract boolean checkUserExist(String account);
 
-    protected abstract String login3rd(HttpServletRequest request);
+    public abstract String login3rd(HttpServletRequest request);
 
 
     protected final void validate(RegisterLoginFuncInterface funcInterface) {

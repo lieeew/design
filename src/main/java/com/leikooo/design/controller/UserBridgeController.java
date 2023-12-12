@@ -4,17 +4,15 @@ import com.leikooo.design.adapter.Login3rdAdapter;
 import com.leikooo.design.pojo.UserInfo;
 import com.leikooo.design.service.UserService;
 import jakarta.annotation.Resource;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author <a href="https://github.com/lieeew">leikooo</a>
  * @Description
  */
 @RestController
-public class UserController {
+@RequestMapping("/bridge")
+public class UserBridgeController {
     @Resource
     private UserService userService;
 
@@ -30,7 +28,7 @@ public class UserController {
     public String register(@RequestBody UserInfo userInfo) {
         return userService.register(userInfo);
     }
-    @GetMapping("/gitee")
+    @GetMapping("/bridge/gitee")
     public String register(String code, String state) {
         return login3rdAdapter.loginByGitee(code, state);
     }
