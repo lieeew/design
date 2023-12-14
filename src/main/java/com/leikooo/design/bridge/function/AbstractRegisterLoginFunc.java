@@ -29,7 +29,7 @@ public abstract class AbstractRegisterLoginFunc implements RegisterLoginFuncInte
     }
 
     protected String commonRegister(UserInfo userInfo, UserRepository userRepository) {
-        if (this.checkUserExist(userInfo.getUserName())) {
+        if (this.commonCheckUserExist(userInfo.getUserName(), userRepository)) {
             throw new RuntimeException("user already exists");
         }
         userInfo.setCreatData(new Date());

@@ -1,9 +1,11 @@
 package com.leikooo.design.bridge.function;
 
 import com.alibaba.fastjson2.JSONObject;
+import com.leikooo.design.bridge.abst.factory.RegisterLoginComponentFactory;
 import com.leikooo.design.pojo.UserInfo;
 import com.leikooo.design.repo.UserRepository;
 import com.leikooo.design.utils.HttpClientUtils;
+import jakarta.annotation.PostConstruct;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import org.apache.commons.lang3.StringUtils;
@@ -32,6 +34,11 @@ public class RegisterLoginByGitee extends AbstractRegisterLoginFunc implements R
 
     @Value("${gitee.user.prefix}")
     private String giteePrefix;
+
+    @PostConstruct
+    public void initFuncMap() {
+        RegisterLoginComponentFactory.funcMap.put("GITEE", this);
+    }
 
     @Override
     public String login3rd(HttpServletRequest request) {

@@ -2,13 +2,16 @@ package com.leikooo.design.service;
 
 import com.leikooo.design.bridge.abst.AbstractRegisterLoginComponent;
 import com.leikooo.design.bridge.abst.RegisterLoginComponent;
+import com.leikooo.design.bridge.abst.factory.RegisterLoginComponentFactory;
 import com.leikooo.design.bridge.function.RegisterLoginByDefault;
 import com.leikooo.design.pojo.UserInfo;
 import com.leikooo.design.repo.UserRepository;
 import jakarta.annotation.Resource;
+import jakarta.servlet.http.HttpServletRequest;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
+import java.nio.file.LinkOption;
 import java.util.Date;
 
 
@@ -22,13 +25,23 @@ public class UserBridgeService {
     private UserRepository userRepository;
 
     public String login(String account, String password) {
-        AbstractRegisterLoginComponent registerLoginComponent = new RegisterLoginComponent(new RegisterLoginByDefault());
-        return  registerLoginComponent.login(account, password);
+//        这样每一次调用就会创建两个对象，对垃圾回收的压力太高, 我们需要优化一下
+//        AbstractRegisterLoginComponent registerLoginComponent = new RegisterLoginComponent(new RegisterLoginByDefault());
+//        return  registerLoginComponent.login(account, password);
+        AbstractRegisterLoginComponent loginComponent = RegisterLoginComponentFactory.getRegisterLoginComponent("DEFAULT");
+        return loginComponent.login(account, password);
     }
 
     public String register(UserInfo userInfo) {
-        return null;
+        AbstractRegisterLoginComponent loginComponent = RegisterLoginComponentFactory.getRegisterLoginComponent("DEFAULT");
+        return loginComponent.register(userInfo);
     }
+
+    public String login3rd(HttpServletRequest request, String type) {
+        AbstractRegisterLoginComponent loginComponent = RegisterLoginComponentFactory.getRegisterLoginComponent(type);
+        return loginComponent.login3rd(request);
+    }
+
 
     /**
      * @param userName

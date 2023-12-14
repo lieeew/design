@@ -17,6 +17,15 @@ spring:
       hibernate:
         hbm2ddl:
           auto: update
+  data:
+    redis:
+      database: 0
+      host: localhost
+      port: 6379
+  sql:
+    init:
+      schema-locations: classpath:schema.sql
+      data-locations: classpath:data.sql
 gitee:
   callBack: http://localhost:8081/bridge/gitee
   clientId: 49828cf7506483f93edcc340fd6e7017a9dbc95713b7c0de6adffa069d594fc7
