@@ -36,4 +36,7 @@ public class RedisCommonProcessor {
             this.set(key, value);
         }
     }
+    public void remove(String key) {
+        redisTemplate.delete(key);
+    }
 }
