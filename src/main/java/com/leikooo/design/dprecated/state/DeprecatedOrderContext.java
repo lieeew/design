@@ -14,9 +14,6 @@ public class DeprecatedOrderContext {
     private DeprecatedCreateOrder deprecatedCreateOrder;
     private DeprecatedAbstractOrderState currentState;
 
-    public void setCurrentState(DeprecatedAbstractOrderState currentState) {
-        this.currentState = currentState;
-    }
 
     public DeprecatedOrder creatOrder(String orderId, String productId) {
         this.currentState = this.deprecatedCreateOrder;
