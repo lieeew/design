@@ -9,13 +9,13 @@ import org.springframework.stereotype.Component;
  * @Description
  */
 @Component
-public class DeprecatedOrderPay extends DeprecatedAbstractOrderState {
+public class DeprecatedPayOrder extends DeprecatedAbstractOrderState {
     @Resource
     private RedisCommonProcessor redisCommonProcessor;
     @Resource
     private DeprecatedSendOrder deprecatedSendOrder;
     @Override
-    public DeprecatedOrder payOrder(String orderId, DeprecatedOrderContext context) {
+    public DeprecatedOrder payOrder(String orderId) {
         var order = (DeprecatedOrder) redisCommonProcessor.get(orderId);
         if (!order.getState().equals(ORDER_WAIT_PAY)) {
             throw new UnsupportedOperationException("order state should be ORDER_WAIT_PAY not" + order.getState());
@@ -26,7 +26,7 @@ public class DeprecatedOrderPay extends DeprecatedAbstractOrderState {
                 .orderId(order.getOrderId())
                 .build();
         redisCommonProcessor.set(orderId, updateOrder, 500);
-        context.setCurrentState(this.deprecatedSendOrder);
+        super.notifyObserver(orderId, ORDER_WAIT_SEND);
         return updateOrder;
     }
 }

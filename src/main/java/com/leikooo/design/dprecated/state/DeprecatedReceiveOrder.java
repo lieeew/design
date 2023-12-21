@@ -14,7 +14,7 @@ public class DeprecatedReceiveOrder extends DeprecatedAbstractOrderState {
     private RedisCommonProcessor redisCommonProcessor;
 
     @Override
-    public DeprecatedOrder receiveOrder(String orderId, DeprecatedOrderContext context) {
+    public DeprecatedOrder receiveOrder(String orderId) {
         var order = (DeprecatedOrder) redisCommonProcessor.get(orderId);
         if (!order.getState().equals(ORDER_WAIT_RECEIVE)) {
             throw new UnsupportedOperationException("order state should be ORDER_WAIT_RECEIVE not" + order.getState());
@@ -23,6 +23,7 @@ public class DeprecatedReceiveOrder extends DeprecatedAbstractOrderState {
                 .orderId(orderId)
                 .state(ORDER_FINISH)
                 .build();
+        super.notifyObserver(orderId, ORDER_FINISH);
         redisCommonProcessor.remove(orderId);
         return updateOrder;
     }
