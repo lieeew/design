@@ -35,7 +35,7 @@ public class OrderStateListener {
                 .productId(order.getProductId())
                 .price(order.getPrice())
                 .build();
-        redisCommonProcessor.set(order.getOrderId(), updateOrder);
+        redisCommonProcessor.set(order.getOrderId(), updateOrder, 900);
         return true;
     }
 
@@ -54,7 +54,7 @@ public class OrderStateListener {
                 .productId(order.getProductId())
                 .price(order.getPrice())
                 .build();
-        redisCommonProcessor.set(order.getOrderId(), updateOrder);
+        redisCommonProcessor.set(order.getOrderId(), updateOrder, 900);
         return true;
     }
     @OnStateChanged(source = "ORDER_WAIT_RECEIVE", target = "ORDER_FINISH")

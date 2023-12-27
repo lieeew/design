@@ -8,6 +8,7 @@ import jakarta.annotation.Resource;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.statemachine.StateMachine;
+import org.springframework.statemachine.data.redis.RedisStateMachinePersister;
 import org.springframework.statemachine.persist.StateMachinePersister;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
@@ -23,7 +24,7 @@ public class OrderService {
     @Resource
     private RedisCommonProcessor redisCommonProcessor;
     @Resource
-    private StateMachinePersister<OrderState, OrderStateChangeAction, String> stateMachineRedisPersist;
+    private RedisStateMachinePersister<OrderState, OrderStateChangeAction> redisStateMachinePersister;
 
     public Order creatOrder(String productId) {
         String orderId = "OID" + productId;
@@ -33,7 +34,7 @@ public class OrderService {
                 .orderState(OrderState.ORDER_WAIT_PAY)
                 .build();
         redisCommonProcessor.set(orderId, order, 900);
-        return order;
+        return (Order) redisCommonProcessor.get(orderId);
     }
 
     public Order pay(String orderId) {
@@ -43,7 +44,7 @@ public class OrderService {
                 .setHeader("order", order)
                 .build();
         if (changeStateAction(message, order)) {
-            return order;
+            return (Order) redisCommonProcessor.get(orderId);
         }
         return null;
     }
@@ -55,7 +56,7 @@ public class OrderService {
                 .setHeader("order", order)
                 .build();
         if (changeStateAction(message, order)) {
-            return order;
+            return (Order) redisCommonProcessor.get(orderId);
         }
         return null;
     }
@@ -67,7 +68,7 @@ public class OrderService {
                 .setHeader("order", order)
                 .build();
         if (changeStateAction(message, order)) {
-            return order;
+            return (Order) redisCommonProcessor.get(orderId);
         }
         return null;
     }
@@ -77,11 +78,11 @@ public class OrderService {
             orderStateMachine.start();
             // 从 redis 中获取状态机，缓存的 key 是 orderId + "STATE"
             // todo 修改 bug
-            stateMachineRedisPersist.restore(orderStateMachine, order.getOrderId() + "STATE");
+            redisStateMachinePersister.restore(orderStateMachine, order.getOrderId() + "STATE");
             // 把 Message 发给 OrderStateListener
             boolean result = orderStateMachine.sendEvent(message);
             // 修改完成订单状态 状态机 存储到 redis 之中
-            stateMachineRedisPersist.persist(orderStateMachine, order.getOrderId() + "STATE");
+            redisStateMachinePersister.persist(orderStateMachine, order.getOrderId() + "STATE");
             return result;
         } catch (Exception e) {
             throw new RuntimeException(e);
