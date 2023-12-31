@@ -7,7 +7,7 @@ import com.leikooo.design.pojo.Order;
  * @author <a href="https://github.com/lieeew">leikooo</a>
  * @Description
  */
-public class PayContext {
+public class PayContext extends AbstractPayContext{
     // 关联支付策略
     private PayStrategyInterface payStrategy;
 

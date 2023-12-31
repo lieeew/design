@@ -11,9 +11,7 @@ import org.springframework.messaging.Message;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.statemachine.StateMachine;
 import org.springframework.statemachine.data.redis.RedisStateMachinePersister;
-import org.springframework.statemachine.persist.StateMachinePersister;
 import org.springframework.stereotype.Service;
-import reactor.core.publisher.Mono;
 
 /**
  * @author <a href="https://github.com/lieeew">leikooo</a>
