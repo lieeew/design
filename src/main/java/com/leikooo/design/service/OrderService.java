@@ -4,6 +4,7 @@ import com.leikooo.design.ordermanagement.comand.OrderCommand;
 import com.leikooo.design.ordermanagement.comand.invoke.OrderCommandInvoke;
 import com.leikooo.design.ordermanagement.state.OrderState;
 import com.leikooo.design.ordermanagement.state.OrderStateChangeAction;
+import com.leikooo.design.pay.face.PayFace;
 import com.leikooo.design.pojo.Order;
 import com.leikooo.design.utils.RedisCommonProcessor;
 import jakarta.annotation.Resource;
@@ -27,6 +28,9 @@ public class OrderService {
     private RedisStateMachinePersister<OrderState, OrderStateChangeAction> redisStateMachinePersister;
     @Resource
     private OrderCommand orderCommand;
+    @Resource
+    private PayFace payFace;
+
     public Order creatOrder(String productId) {
         String orderId = "OID" + productId;
         Order order = Order.builder()
@@ -76,11 +80,17 @@ public class OrderService {
         return null;
     }
 
+    public String getPayUrl(String orderId, Float price, Integer payType) {
+        var order = (Order) redisCommonProcessor.get(orderId);
+        Order updateOrder = Order.builder().orderState(order.getOrderState()).productId(order.getProductId()).orderId(order.getOrderId()).price(price).build();
+        return payFace.pay(updateOrder, payType);
+    }
+
     private boolean changeStateAction(Message<OrderStateChangeAction> message, Order order) {
         try {
             orderStateMachine.start();
             // 从 redis 中获取状态机，缓存的 key 是 orderId + "STATE"
-            // todo 修改 bug
+            // 这里的 bug 就是 redis 里面的 machine 在测试之前必须删除
             redisStateMachinePersister.restore(orderStateMachine, order.getOrderId() + "STATE");
             // 把 Message 发给 OrderStateListener
             boolean result = orderStateMachine.sendEvent(message);

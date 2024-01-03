@@ -33,8 +33,8 @@ public class OrderController {
     }
 
     @PostMapping("/pay")
-    public Order pay(@RequestParam String orderId) {
-        return orderService.pay(orderId);
+    public String pay(@RequestParam String orderId, @RequestParam Float price, @RequestParam Integer payType) {
+        return orderService.getPayUrl(orderId, price, payType);
     }
 
     @PostMapping("/send")
@@ -47,7 +47,7 @@ public class OrderController {
         return orderService.receive(orderId);
     }
 
-    @RequestMapping("/alipayCallback")
+    @RequestMapping("/alipayCa9llback")
     public String alipayCallback(HttpServletRequest request) throws AlipayApiException, UnsupportedEncodingException, UnsupportedEncodingException {
         // 获取回调信息
         Map<String, String> params = new HashMap<>();
@@ -64,7 +64,7 @@ public class OrderController {
             params.put(name, valueStr);
         }
         //验证签名，确保回调接口真的是支付宝平台触发的
-        boolean signVerified = AlipaySignature.rsaCheckV1(params, Constants.APP_PUBLIC_KWY, "UTF-8", Constants.SIGN_TYPE); // 调用SDK验证签名
+        boolean signVerified = AlipaySignature.rsaCheckV1(params, Constants.APP_PUBLIC_KEY, "UTF-8", Constants.SIGN_TYPE); // 调用SDK验证签名
         //确定是否是支付宝平台 发起的回调
         if (!signVerified) {
             throw new UnsupportedOperationException("callback verify failed!");
@@ -78,6 +78,6 @@ public class OrderController {
         float totalAmount = Float.parseFloat(new String(request.getParameter("total_amount").getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8));
         orderService.pay(outTradeNo);
         //进行相关的业务操作
-        return "支付成功页面跳转, 当前订单为：";
+        return "支付成功页面跳转, 当前订单为：" + outTradeNo;
     }
 }

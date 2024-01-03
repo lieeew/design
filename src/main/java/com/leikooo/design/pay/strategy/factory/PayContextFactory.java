@@ -2,7 +2,7 @@ package com.leikooo.design.pay.strategy.factory;
 
 import com.leikooo.design.pay.strategy.PayStrategyInterface;
 import com.leikooo.design.pay.strategy.context.PayContext;
-
+import org.springframework.stereotype.Component;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -11,6 +11,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author <a href="https://github.com/lieeew">leikooo</a>
  * @Description
  */
+@Component
 public class PayContextFactory extends AbstractPayContextFactory<PayContext> {
     public static final Map<String, PayContext> payContexts = new ConcurrentHashMap<>();
 
