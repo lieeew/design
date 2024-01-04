@@ -25,6 +25,7 @@ public class RegisterLoginComponentFactory {
                 // 需要加一个双重校验
                 if (component == null) {
                     component = new RegisterLoginComponent(funcMap.get(type));
+                    componentMap.put(type, component);
                 }
             }
         }
