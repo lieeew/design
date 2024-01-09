@@ -22,8 +22,10 @@ import org.springframework.stereotype.Component;
 public class OrderStateListener {
     @Resource
     private RedisCommonProcessor redisCommonProcessor;
+
     @Resource
     private OrderCommand orderCommand;
+
     @OnStateChanged(source = "ORDER_WAIT_PAY", target = "ORDER_WAIT_SEND")
     public boolean payToSend(Message<OrderStateChangeAction> message) {
         // 从 redis 之中拿到了订单，判断是状态
@@ -65,6 +67,7 @@ public class OrderStateListener {
         invoke.invoke(orderCommand, updateOrder);
         return true;
     }
+
     @OnStateChanged(source = "ORDER_WAIT_RECEIVE", target = "ORDER_FINISH")
     public boolean receiveToFinish(Message<OrderStateChangeAction> message) {
         // 从 redis 之中拿到了订单，判断是状态
@@ -84,4 +87,5 @@ public class OrderStateListener {
         invoke.invoke(orderCommand, updateOrder);
         return true;
     }
+
 }

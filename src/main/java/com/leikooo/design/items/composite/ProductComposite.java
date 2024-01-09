@@ -1,5 +1,6 @@
 package com.leikooo.design.items.composite;
 
+import com.leikooo.design.pojo.ProductItem;
 import lombok.*;
 import java.util.ArrayList;
 import java.util.Iterator;

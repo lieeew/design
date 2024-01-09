@@ -58,21 +58,13 @@ public class OrderStateMachineConfig extends StateMachineConfigurerAdapter<Order
                 .event(OrderStateChangeAction.RECEIVE_ORDER);
     }
 
-//   @Bean(name = "stateMachineRedisPersist")
-//    public RedisStateMachinePersister<OrderState, OrderStateChangeAction> getRedisPersister() {
-//        RedisStateMachineContextRepository<OrderState, OrderStateChangeAction> repository = new RedisStateMachineContextRepository<>(redisConnectionFactory);
-//        RepositoryStateMachinePersist<OrderState, OrderStateChangeAction> p = new RepositoryStateMachinePersist<>(repository);
-//        // 最后两个之母是 er 一般在开源的框架下面都是指的是暴漏给使用者的调用入口
-//        return new RedisStateMachinePersister<>(p);
-//    }
-
     @Bean
     public StateMachinePersist<OrderState, OrderStateChangeAction, String> stateMachinePersist(RedisConnectionFactory connectionFactory) {
         RedisStateMachineContextRepository<OrderState, OrderStateChangeAction> repository =
                 new RedisStateMachineContextRepository<>(connectionFactory);
         return new RepositoryStateMachinePersist<>(repository);
     }
-//
+
     @Bean
     public RedisStateMachinePersister<OrderState, OrderStateChangeAction> redisStateMachinePersister(
             StateMachinePersist<OrderState, OrderStateChangeAction, String> stateMachinePersist) {

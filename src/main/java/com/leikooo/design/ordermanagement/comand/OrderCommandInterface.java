@@ -8,6 +8,11 @@ import com.leikooo.design.pojo.Order;
  */
 public interface OrderCommandInterface {
 
-    // 执行先关的命令
+    /**
+     * 执行先关的命令
+     *
+     * @param order
+     */
     void execute(Order order);
+
 }

@@ -22,12 +22,16 @@ import org.springframework.stereotype.Service;
 public class OrderService {
     @Resource
     private StateMachine<OrderState, OrderStateChangeAction> orderStateMachine;
+
     @Resource
     private RedisCommonProcessor redisCommonProcessor;
+
     @Resource
     private RedisStateMachinePersister<OrderState, OrderStateChangeAction> redisStateMachinePersister;
+
     @Resource
     private OrderCommand orderCommand;
+
     @Resource
     private PayFace payFace;
 

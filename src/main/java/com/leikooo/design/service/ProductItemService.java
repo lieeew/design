@@ -25,10 +25,13 @@ import java.util.stream.Collectors;
 public class ProductItemService {
     @Resource
     private RedisCommonProcessor redisCommonProcessor;
+
     @Resource
     private AddItemVisitor addItemVisitor;
+
     @Resource
     private DelItemVisitor delItemVisitor;
+
     @Resource
     private ProductItemRepository productItemRepository;
 

@@ -12,7 +12,6 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class DelItemVisitor implements ItemsVisitor<AbstractProductionItem> {
-
     @Resource
     private RedisCommonProcessor redisCommonProcessor;
 

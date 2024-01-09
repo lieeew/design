@@ -12,4 +12,5 @@ public class OrderCommandInvoke {
     public void invoke(OrderCommandInterface command, Order order) {
         command.execute(order);
     }
+
 }

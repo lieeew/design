@@ -18,4 +18,5 @@ public class OrderCommand implements OrderCommandInterface {
     public void execute(Order order) {
         this.receiver.action(order);
     }
+
 }
